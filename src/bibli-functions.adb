@@ -36,7 +36,7 @@ PACKAGE BODY Bibli.Functions IS
             WHEN 'A' => Categorie := ALBUM;
             WHEN 'J' => Categorie := JEU;
             WHEN 'F' => Categorie := FILM;
-            WHEN OTHERS => Categorie := AUTRE;
+            WHEN OTHERS => Null;
          END CASE;
       END IF;
 
