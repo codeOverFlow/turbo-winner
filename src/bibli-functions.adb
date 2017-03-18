@@ -21,43 +21,53 @@ PACKAGE BODY Bibli.Functions IS
    PROCEDURE Affiche_Oeuvre(Oeuvre: IN T_Oeuvre) IS
       Chaine_Vide: String(1..T_Nom_Piste'Last) := (OTHERS => ' ');
    BEGIN
-      Put_Line(">>>>>>>>" & Oeuvre.Titre(1..Oeuvre.Titre'Length));
-      Put_Line(">>>> " &  Oeuvre.Categorie'Img);
-      Put_Line(">>>> " & Oeuvre.Support'Img);
-      Put_Line(">>>> " & Oeuvre.Etoiles'Img);
+      Put_Line(">>>>>> Titre: " & Oeuvre.Titre(1..Oeuvre.Titre'Length));
+      Put_Line("> Categorie: " &  Oeuvre.Categorie'Img);
+      Put_Line("> Support " & Oeuvre.Support'Img);
+      Put_Line("> Etoiles" & Oeuvre.Etoiles'Img);
       NEW_Line;
    END Affiche_Oeuvre;
 
    FUNCTION Choix_Categorie(Str: IN String) RETURN T_Categorie IS
-      Categorie: T_Categorie;
+      Categorie: T_Categorie := AUTRE;
    BEGIN
-      CASE P_Ch.To_Upper(Str(Str'First)) IS
-         WHEN 'A' => Categorie := ALBUM;
-         WHEN 'J' => Categorie := JEU;
-         WHEN 'F' => Categorie := FILM;
-         WHEN 'O' => Categorie := AUTRE;
-         WHEN OTHERS => NULL; -- echec de la precondition !
-      END CASE;
+      IF Str'Length > 0 THEN
+         CASE P_Ch.To_Upper(Str(Str'First)) IS
+            WHEN 'A' => Categorie := ALBUM;
+            WHEN 'J' => Categorie := JEU;
+            WHEN 'F' => Categorie := FILM;
+            WHEN OTHERS => Categorie := AUTRE;
+         END CASE;
+      END IF;
 
       RETURN Categorie;
    END Choix_Categorie;
 
    FUNCTION Choix_Support(Str: IN String) RETURN T_Support IS
-      Support: T_Support := T_Support'Value(P_Ch.To_Upper(Str));
+      Support: T_Support;
    BEGIN
+      Support := T_Support'Value(P_Ch.To_Upper(Str));
       RETURN Support;
+   EXCEPTION
+      WHEN OTHERS => RETURN CD;
    END Choix_Support;
 
    FUNCTION Choix_Etoiles(Str: IN String) RETURN T_Etoile IS
-      Etoiles: T_Etoile := T_Etoile'Value(Str);
+      Etoiles: T_Etoile;
    BEGIN
+      Etoiles := T_Etoile'Value(Str);
       RETURN Etoiles;
+   EXCEPTION
+         WHEN OTHERS => RETURN 0;
    END Choix_Etoiles;
 
    FUNCTION Choix_Langue(Str: IN String) RETURN T_Langue IS
-      Langue: T_Langue := T_Langue'Value(Str);
+      Langue: T_Langue;
    BEGIN
+      Langue := T_Langue'Value(Str);
       RETURN Langue;
+   EXCEPTION
+      WHEN OTHERS => RETURN VF;
    END Choix_Langue;
 
    FUNCTION Saisie_Oeuvre(Categorie: IN T_Categorie) RETURN T_Oeuvre IS
